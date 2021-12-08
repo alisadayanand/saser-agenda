@@ -166,22 +166,22 @@
 
     </div>
     <div class="main-form">
-        <form action="index.php" method="get">
+        <form action="http://localhost:5000/viewAgendaByDate" method="post">
 
             <div>
                 <span>Date of SASER to view:</span>
                 <input type="date" name="date" id="date" required>
             </div>
 
-            
-            <div id="newrow">
-                <input type="newrow" value="Select" id="newrow">
-            </div>
-
-
             <div>
+               <a href="/viewAgendaByDate"><button type="submit" id="newrow"> Select </button></a>
+{#                <button type="submit" id="newrow"> Select </button>#}
+
+            </div>
+        </form>
+         <div>
                 <span>Meeting name:</span>
-                <input type="text" name="name" id="name" required>
+                <input type="text" name="name" id="name" required placeholder="{{ test }}" value="{{ location }}">
             </div>
 
             <div>
@@ -203,9 +203,9 @@
                 <span>Chairperson:</span>
                 <input type="text" name="chairperson" id="chairperson" required>
             </div>
-             
-            <div><span>Atendees:</span></div>
-            
+
+            <div><span>Attendees:</span></div>
+
             <div id="attend">
                 <input type="text" name="atendees" id="atendees" required>
             </div>
@@ -241,7 +241,7 @@
                     <tr>
                         <td>Welcome & Apologies</td>
                         <td><div>For Awareness </div>
-                            <div>For Input </div> 
+                            <div>For Input </div>
                             <div>RF Process or Vendor Selection </div>
                             <div>For Approval </div>
                             <div>Risk Management </div></td>
@@ -257,7 +257,7 @@
 
 
             <div id="newrow">
-                <input type="newrow" value="Add new row" id="newrow">
+                <input type="button" value="Add new row" id="newrow">
             </div>
 
             <div>
@@ -269,9 +269,6 @@
             <div id="submit">
                 <input type="gendoc" value="Generate Document" id="gendoc">
             </div>
-
-
-        </form>
     </div>
 </div>
 
