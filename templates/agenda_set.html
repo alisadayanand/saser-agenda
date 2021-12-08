@@ -1,0 +1,276 @@
+{%extends "index.html"%}
+{%block content%}
+
+<style>
+
+*{
+    margin: 0;
+    padding: 0;
+}
+
+.main_bg{
+    max-width: 1280px;
+    height: 1000px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+    min-height: 100%;
+}
+
+.form{
+    width: 1000px;
+}
+
+.form-text{
+    text-align: center;
+    margin: 0 0 40px 0;
+}
+.form-text h1 span img{
+    margin: 0 10px;
+
+}
+.form-text h1{
+    color: rgb(5, 5, 5);
+    font-family: Roboto;
+    font-style: bold;
+    margin-top: 420px;
+}
+.form-text p{
+    font-family: Roboto;
+      font-style: bold;
+    font-size: large;
+}
+
+.main-form div{
+    margin: 10px 10px;
+    width: 300px;
+    display: inline-block;
+}
+.main-form div input {
+    width: 100%;
+    font-family: Roboto;
+    font-style: normal;
+    background: #f2f3f6;
+    border: 1px solid #f2f3f6;
+    font-size: 20px;
+    color: rgb(0, 0, 0);
+    outline: none;
+    padding: 3px 0 3px 10px;
+    margin-top: 10px;
+}
+.main-form div select{
+    width: 104%;
+    font-family: Roboto;
+    font-style: normal;
+    background: none;
+    border: 1px solid #f2f3f6;
+    font-size: 20px;
+    color: rgb(0, 0, 0);
+    outline: none;
+    padding: 3px 0 3px 10px;
+    margin-top: 10px;
+}
+.main-form div span{
+    width: 100%;
+    font-family: Roboto;
+    font-style: normal;
+    color: rgb(0, 0, 0);
+    font-size: 25px;
+}
+
+#attend{
+    width: 104%;
+    font-family: Roboto;
+    font-style: normal;
+    background: #f2f3f6;
+    height: 200px;
+    width: 950px;
+    font-size: 20px;
+    color: rgb(0, 0, 0);
+    padding: 3px 0 3px 10px;
+    margin-top: 10px;
+}
+
+#table{
+    width: 104%;
+    font-family: Roboto;
+    font-style: normal;
+    border: 1px solid #f2f3f6;
+    height: 200px;
+    width: 950px;
+    font-size: 20px;
+    color: rgb(0, 0, 0);
+    padding: 3px 0 3px 10px;
+    margin-top: 10px;
+}
+
+#newrow{
+    width: 950px;
+    text-align: center;
+    background-color: #f2f3f6 !important;
+    color: rgb(0, 0, 0) !important;
+}
+
+#newrow input:hover{
+    font-family: Roboto;
+    font-style: normal;
+    text-align: center;
+    width: 950px;
+    background-color: black !important;
+    color: #fff !important;
+}
+
+#submit{
+    width: 100%;
+    text-align: center;
+    width: 300px;
+}
+#submit input{
+    font-family: Roboto;
+    font-style: normal;
+    text-align: center;
+    width: 300px;
+    background-color: #0075C9 !important;
+    color: rgb(255, 255, 255) !important;
+    transition: all .3s;
+}
+#submit input:hover{
+    font-family: Roboto;
+    font-style: normal;
+    text-align: center;
+    width: 300px;
+    background-color: black !important;
+    color: #fff !important;
+}
+#submit input:active{
+    font-size: 19px;
+    background-color: rgb(46, 20, 5) !important;
+    color: #fff !important;
+}
+
+
+@media screen and (max-width:710px) {
+    .main-form{
+        text-align: center;
+    }
+}
+
+
+</style>
+
+<div class="form">
+    <div class="form-text">
+        <h1>Set Agenda</h1>
+
+    </div>
+    <div class="main-form">
+        <form action="index.php" method="get">
+            <div>
+                <span>Meeting name:</span>
+                <input type="text" name="name" id="name" required>
+            </div>
+
+            <div>
+                <span>Meeting Date:</span>
+                <input type="date" name="date" id="date" required>
+            </div>
+
+            <div>
+                <span>Start Time:</span>
+                <input type="time" name="starttime" id="starttime" required>
+            </div>
+
+            <div>
+                <span>End Time:</span>
+                <input type="time" name="endtime" id="endtime" required>
+            </div>
+
+            <div>
+                <span>Location/ room:</span>
+                <input type="text" name="locroom" id="locroom" required>
+            </div>
+
+            <div>
+                <span>Chairperson:</span>
+                <input type="text" name="chairperson" id="chairperson" required>
+            </div>
+             
+            <div><span>Atendees:</span></div>
+            
+            <div id="attend">
+                <input type="text" name="atendees" id="atendees" required>
+            </div>
+
+            <div>
+                <span>By Invitation:</span>
+                <input type="text" name="byinvite" id="byinvite" required>
+            </div>
+
+            <div>
+                <span>Apologies/ Declines:</span>
+                <input type="text" name="apol" id="apol" required>
+            </div>
+
+            <div>
+                <span>Minute Taker:</span>
+                <input type="text" name="mintaker" id="mintaker" required>
+            </div>
+
+            <div><span>Agenda Topics</span></div>
+
+            <div id="table">
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th>Topic</th>
+                        <th>Objective/ Outcome</th>
+                        <th>Owner</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    <tr>
+                        <td>Welcome & Apologies</td>
+                        <td><div>For Awareness </div>
+                            <div>For Input </div> 
+                            <div>RF Process or Vendor Selection </div>
+                            <div>For Approval </div>
+                            <div>Risk Management </div></td>
+                        <td>-</td>
+
+                    </tr>
+                    </tbody>
+                </table>
+
+            </div>
+
+
+
+
+            <div id="newrow">
+                <input type="newrow" value="Add new row" id="newrow">
+            </div>
+
+            <div>
+                <span> Next Meeting Date:</span>
+                <input type="date" name="nextdate" id="nextdate" required>
+            </div>
+
+
+            
+            <div id="submit">
+                <input type="confirm" value="Confirm" id="confirm">
+            </div>
+
+            <div id="submit">
+                <input type="gendoc" value="Generate Document" id="gendoc">
+            </div>
+
+
+        </form>
+    </div>
+</div>
+
+{%endblock content%}
