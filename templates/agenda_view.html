@@ -35,7 +35,7 @@
     color: rgb(5, 5, 5);
     font-family: Roboto;
     font-style: bold;
-    margin-top: 1px;
+    margin-top: 500px;
 }
 .form-text p{
     font-family: Roboto;
@@ -169,13 +169,105 @@
         <form action="index.php" method="get">
 
             <div>
-                <span>Date of SASER:</span>
+                <span>Date of SASER to view:</span>
                 <input type="date" name="date" id="date" required>
             </div>
 
             
             <div id="newrow">
                 <input type="newrow" value="Select" id="newrow">
+            </div>
+
+
+            <div>
+                <span>Meeting name:</span>
+                <input type="text" name="name" id="name" required>
+            </div>
+
+            <div>
+                <span>Start Time:</span>
+                <input type="time" name="starttime" id="starttime" required>
+            </div>
+
+            <div>
+                <span>End Time:</span>
+                <input type="time" name="endtime" id="endtime" required>
+            </div>
+
+            <div>
+                <span>Location/ room:</span>
+                <input type="text" name="locroom" id="locroom" required>
+            </div>
+
+            <div>
+                <span>Chairperson:</span>
+                <input type="text" name="chairperson" id="chairperson" required>
+            </div>
+             
+            <div><span>Atendees:</span></div>
+            
+            <div id="attend">
+                <input type="text" name="atendees" id="atendees" required>
+            </div>
+
+            <div>
+                <span>By Invitation:</span>
+                <input type="text" name="byinvite" id="byinvite" required>
+            </div>
+
+            <div>
+                <span>Apologies/ Declines:</span>
+                <input type="text" name="apol" id="apol" required>
+            </div>
+
+            <div>
+                <span>Minute Taker:</span>
+                <input type="text" name="mintaker" id="mintaker" required>
+            </div>
+
+            <div><span>Agenda Topics</span></div>
+
+            <div id="table">
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th>Topic</th>
+                        <th>Objective/ Outcome</th>
+                        <th>Owner</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    <tr>
+                        <td>Welcome & Apologies</td>
+                        <td><div>For Awareness </div>
+                            <div>For Input </div> 
+                            <div>RF Process or Vendor Selection </div>
+                            <div>For Approval </div>
+                            <div>Risk Management </div></td>
+                        <td>-</td>
+
+                    </tr>
+                    </tbody>
+                </table>
+
+            </div>
+
+
+
+
+            <div id="newrow">
+                <input type="newrow" value="Add new row" id="newrow">
+            </div>
+
+            <div>
+                <span> Next Meeting Date:</span>
+                <input type="date" name="nextdate" id="nextdate" required>
+            </div>
+
+
+            <div id="submit">
+                <input type="gendoc" value="Generate Document" id="gendoc">
             </div>
 
 
