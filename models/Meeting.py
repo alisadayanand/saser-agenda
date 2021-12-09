@@ -1,8 +1,7 @@
-from sqlalchemy import Column, Integer, Date, Time, String, ForeignKey
-from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy import Column, Integer, Date, Time, String
 from sqlalchemy.orm import relationship
 
-Base = declarative_base()
+from models.Base import Base
 
 
 class Meeting(Base):
@@ -12,4 +11,4 @@ class Meeting(Base):
    meeting_date = Column(Date)
    meeting_start_time = Column(Time)
    meeting_end_time = Column(Time)
-   agendas = relationship("Agenda")
+   agendas = relationship("Agenda", back_populates='meeting')

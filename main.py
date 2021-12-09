@@ -1,7 +1,11 @@
 import sqlalchemy
-from flask import Flask, render_template, request, session
+from flask import Flask, render_template, request
 
 from models.Agenda import Agenda
+from models.Meeting import Meeting
+from models.Base import Session
+
+session = Session()
 
 main = Flask(__name__)
 
@@ -24,12 +28,7 @@ def view():
 
 
 
-engine = sqlalchemy.create_engine("mariadb+mariadbconnector://root:root@127.0.0.1:3306/sgtdevsaser")
 
-# Create a session
-Session = sqlalchemy.orm.sessionmaker()
-Session.configure(bind=engine)
-session = Session()
 
 def addAgendaToDb(meetingName, meetingDate, startTime, endTime, location, chairperson, attendees, byInvitation, apologies, minuteTaker, nextMeetingDate):
    newAgenda = Agenda(
@@ -47,16 +46,13 @@ def addAgendaToDb(meetingName, meetingDate, startTime, endTime, location, chairp
    session.commit()
 
 def selectAllAgendas():
-   agendas = session.query(Agenda).all()
-   for agenda in agendas:
-       print("Agenda ID: {}".format(agenda.agenda_id))
-   return agendas
+  return session.query(Agenda).all()
+
 
 
 def getAgendaByDate(date):
-   agendas = session.query(Agenda).filter_by(date=date)
-   for agenda in agendas:
-       return agenda
+   return session.query(Agenda).filter_by(date=date).first()
+
 
 
 def updateAgenda(id, agendaView):
@@ -67,6 +63,12 @@ def updateAgenda(id, agendaView):
 def deleteAgenda(id):
    session.query(Agenda).filter(Agenda.agenda_id == id).delete()
    session.commit()
+
+def selectAllMeetings():
+   meetings = session.query(Meeting).all()
+   for meeting in meetings:
+       print("Meeting ID: {}".format(meeting.meeting_id))
+   return meetings
 
 
 
@@ -116,5 +118,10 @@ def addAgenda():
 
     return render_template('agenda_set.html')
 
+
+@main.route('/getMeetings', methods=['POST', 'GET'])
+def getMeetings():
+    meetings = selectAllMeetings()
+    return meetings
 
 main.run(debug=True)
