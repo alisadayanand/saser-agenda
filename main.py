@@ -1,4 +1,3 @@
-import sqlalchemy
 from flask import Flask, render_template, request
 
 from models.Agenda import Agenda
@@ -6,6 +5,7 @@ from models.Meeting import Meeting
 from models.Base import Session
 
 session = Session()
+selectedEditAgenda = ''
 
 main = Flask(__name__)
 
@@ -32,6 +32,7 @@ def view():
 
 def addAgendaToDb(meetingName, meetingDate, startTime, endTime, location, chairperson, attendees, byInvitation, apologies, minuteTaker, nextMeetingDate):
    newAgenda = Agenda(
+                      meeting_id= meetingName,
                       date=meetingDate,
                       start_time=startTime,
                       end_time=endTime,
@@ -55,9 +56,21 @@ def getAgendaByDate(date):
 
 
 
-def updateAgenda(id, agendaView):
+def updateAgendaInDb(id, agendaView):
    agenda = session.query(Agenda).get(id)
+
+   agenda.date = agendaView.date
+   agenda.start_time = agendaView.start_time
+   agenda.end_time = agendaView.end_time
+   agenda.location = agendaView.location
    agenda.chairperson = agendaView.chairperson
+   agenda.attendees = agendaView.attendees
+   agenda.by_invitation = agendaView.by_invitation
+   agenda.apologies_declines = agendaView.apologies_declines
+   agenda.minute_taker = agendaView.minute_taker
+   agenda.next_meeting_date = agendaView.next_meeting_date
+
+
    session.commit()
 
 def deleteAgenda(id):
@@ -84,19 +97,40 @@ def viewAgendaByDate():
     date = request.form['date']
     agenda = getAgendaByDate(date)
 
-    return render_template('agenda_view.html',
-                           meetingName="SGT SASER",
-                           startTime=agenda.start_time,
-                           endTime=agenda.end_time,
-                           location=agenda.location,
-                           chairperson=agenda.chairperson,
-                           attendees=agenda.attendees,
-                           byInvitation=agenda.by_invitation,
-                           apologies=agenda.apologies_declines,
-                           minuteTaker=agenda.minute_taker,
-                           date=agenda.date,
-                           nextMeetingDate=agenda.next_meeting_date
+    # set as a global variable so that I can get the id
+    global selectedEditAgenda
+    selectedEditAgenda = agenda
+
+    if request.referrer == 'http://localhost:5000/view':
+
+        return render_template('agenda_view.html',
+                               meetingName="SGT SASER",
+                               startTime=agenda.start_time,
+                               endTime=agenda.end_time,
+                               location=agenda.location,
+                               chairperson=agenda.chairperson,
+                               attendees=agenda.attendees,
+                               byInvitation=agenda.by_invitation,
+                               apologies=agenda.apologies_declines,
+                               minuteTaker=agenda.minute_taker,
+                               date=agenda.date,
+                               nextMeetingDate=agenda.next_meeting_date
                            )
+
+    else:
+        return render_template('agenda_edit.html',
+                               meetingName="SGT SASER",
+                               startTime=agenda.start_time,
+                               endTime=agenda.end_time,
+                               location=agenda.location,
+                               chairperson=agenda.chairperson,
+                               attendees=agenda.attendees,
+                               byInvitation=agenda.by_invitation,
+                               apologies=agenda.apologies_declines,
+                               minuteTaker=agenda.minute_taker,
+                               date=agenda.date,
+                               nextMeetingDate=agenda.next_meeting_date
+                               )
 
 @main.route('/addAgenda', methods=['POST', 'GET'])
 def addAgenda():
@@ -115,8 +149,38 @@ def addAgenda():
 
     addAgendaToDb(meetingName, meetingDate, startTime, endTime, location, chairperson, attendees, byInvite, apologies, minuteTaker, nextMeetingDate)
 
-
     return render_template('agenda_set.html')
+
+
+@main.route('/updateAgenda', methods=['POST', 'GET'])
+def updateAgenda():
+
+    global selectedEditAgenda
+    meetingName = request.form['name']
+    meetingDate = selectedEditAgenda.date
+    startTime = request.form['starttime']
+    endTime = request.form['endtime']
+    location = request.form['locroom']
+    chairperson = request.form['chairperson']
+    attendees = request.form['attendees']
+    byInvite = request.form['byinvite']
+    apologies = request.form['apol']
+    minuteTaker = request.form['mintaker']
+    nextMeetingDate = request.form['nextdate']
+
+    agendaUpdated = Agenda(
+                      date=meetingDate,
+                      start_time=startTime,
+                      end_time=endTime,
+                      location=location,
+                      chairperson=chairperson,
+                      attendees=attendees,
+                      by_invitation=byInvite,
+                      apologies_declines=apologies,
+                      minute_taker=minuteTaker,
+                      next_meeting_date=nextMeetingDate)
+
+    updateAgendaInDb(selectedEditAgenda.agenda_id, agendaUpdated)
 
 
 @main.route('/getMeetings', methods=['POST', 'GET'])

@@ -166,63 +166,64 @@
 
     </div>
     <div class="main-form">
-        <form action="index.php" method="get">
+        <form action="http://localhost:5000/viewAgendaByDate" method="post">
 
             <div>
                 <span>Date of SASER to edit:</span>
-                <input type="date" name="date" id="date" required>
+                <input type="date" name="date" id="date" required value="{{ date }}">
             </div>
 
             
             <div id="newrow">
-                <input type="newrow" value="Select" id="newrow">
+{#                <input type="newrow" value="Select" id="newrow">#}
+                 <a href="/viewAgendaByDate"><button type="submit" id="newrow"> Select </button></a>
             </div>
-
-
+        </form>
+        <form action="http://localhost:5000/updateAgenda" method="post">
             <div>
                 <span>Meeting name:</span>
-                <input type="text" name="name" id="name" required>
+                <input type="text" name="name" id="name" value="{{ meetingName }}">
             </div>
 
             <div>
                 <span>Start Time:</span>
-                <input type="time" name="starttime" id="starttime" required>
+                <input type="time" name="starttime" id="starttime" value="{{ startTime }}">
             </div>
 
             <div>
                 <span>End Time:</span>
-                <input type="time" name="endtime" id="endtime" required>
+                <input type="time" name="endtime" id="endtime" required value="{{ endTime }}">
             </div>
 
             <div>
                 <span>Location/ room:</span>
-                <input type="text" name="locroom" id="locroom" required>
+                <input type="text" name="locroom" id="locroom" required value="{{ location }}">
             </div>
 
             <div>
                 <span>Chairperson:</span>
-                <input type="text" name="chairperson" id="chairperson" required>
+                <input type="text" name="chairperson" id="chairperson" required value="{{ chairperson}}">
             </div>
-             
+
             <div><span>Attendees:</span></div>
-            
+
             <div id="attend">
-                <input type="text" name="attendees" id="attendees" required>
+                <input type="text" name="attendees" id="attendees" required value="{{ attendees }}">
             </div>
 
             <div>
                 <span>By Invitation:</span>
-                <input type="text" name="byinvite" id="byinvite" required>
+                <input type="text" name="byinvite" id="byinvite" required value="{{ byInvitation }}">
             </div>
 
             <div>
                 <span>Apologies/ Declines:</span>
-                <input type="text" name="apol" id="apol" required>
+                <input type="text" name="apol" id="apol" required value="{{ apologies }}">
             </div>
 
             <div>
                 <span>Minute Taker:</span>
-                <input type="text" name="mintaker" id="mintaker" required>
+                <input type="text" name="mintaker" id="mintaker" required value="{{ minuteTaker }}">
             </div>
 
             <div><span>Agenda Topics</span></div>
@@ -241,7 +242,7 @@
                     <tr>
                         <td>Welcome & Apologies</td>
                         <td><div>For Awareness </div>
-                            <div>For Input </div> 
+                            <div>For Input </div>
                             <div>RF Process or Vendor Selection </div>
                             <div>For Approval </div>
                             <div>Risk Management </div></td>
@@ -257,18 +258,19 @@
 
 
             <div id="newrow">
-                <input type="newrow" value="Add new row" id="newrow">
+                <input type="button" value="Add new row" id="newrow">
             </div>
 
             <div>
                 <span> Next Meeting Date:</span>
-                <input type="date" name="nextdate" id="nextdate" required>
+                <input type="date" name="nextdate" id="nextdate" required value="{{ nextMeetingDate }}">
             </div>
 
 
             
             <div id="submit">
-                <input type="button" value="Confirm" id="confirm">
+{#                <input type="button" value="Confirm" id="confirm">#}
+                 <a href="/updateAgenda"><button type="submit" id="confirm"> Confirm </button></a>
             </div>
 
             <div id="submit">
