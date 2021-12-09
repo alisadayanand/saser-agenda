@@ -166,7 +166,7 @@
 
     </div>
     <div class="main-form">
-        <form action="index.php" method="get">
+        <form action="http://localhost:5000/addAgenda" method="post">
             <div>
                 <span>Meeting name:</span>
                 <input type="text" name="name" id="name" required>
@@ -200,7 +200,7 @@
             <div><span>Atendees:</span></div>
             
             <div id="attend">
-                <input type="text" name="atendees" id="atendees" required>
+                <input type="text" name="attendees" id="attendees" required>
             </div>
 
             <div>
@@ -261,7 +261,9 @@
 
             
             <div id="submit">
-                <input type="confirm" value="Confirm" id="confirm">
+{#                <a href="/addAgenda"><input type="confirm" value="Confirm" id="confirm"></a>#}
+               <a href="/addAgenda"><button type="submit" id="confirm"> Confirm </button></a>
+
             </div>
 
             <div id="submit">

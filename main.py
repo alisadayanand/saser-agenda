@@ -1,8 +1,10 @@
 import sys
 
+import sqlalchemy
 from flask import Flask, render_template, redirect, request, session, url_for, jsonify
 import mariadb
 
+from Agenda import Agenda
 
 main = Flask(__name__)
 
@@ -21,64 +23,101 @@ def edit():
 
 @main.route('/view', methods=['POST', 'GET'])
 def view():
-    return render_template('agenda_view.html', test="fdsfsdfsf")
+    return render_template('agenda_view.html')
 
 
 
-# Connect to MariaDB Platform
-try:
-    conn = mariadb.connect(
-        user="root",  # Username
-        password="root",  # Password
-        host="127.0.0.1",  # Host IP
-        port=3306,
-        database="sgtdevsaser"
+engine = sqlalchemy.create_engine("mariadb+mariadbconnector://root:root@127.0.0.1:3306/sgtdevsaser")
 
-    )
-except mariadb.Error as e:
-    print(f"Error connecting to MariaDB Platform: {e}")
-    sys.exit(1)
+# Create a session
+Session = sqlalchemy.orm.sessionmaker()
+Session.configure(bind=engine)
+session = Session()
 
-@main.route('/getAgenda', methods=['POST', 'GET'])
+def addAgendaToDb(meetingName, meetingDate, startTime, endTime, location, chairperson, attendees, byInvitation, apologies, minuteTaker, nextMeetingDate):
+   newAgenda = Agenda(
+                      date=meetingDate,
+                      start_time=startTime,
+                      end_time=endTime,
+                      location=location,
+                      chairperson=chairperson,
+                      attendees=attendees,
+                      by_invitation=byInvitation,
+                      apologies_declines=apologies,
+                      minute_taker=minuteTaker,
+                      next_meeting_date=nextMeetingDate)
+   session.add(newAgenda)
+   session.commit()
+
+def selectAllAgendas():
+   agendas = session.query(Agenda).all()
+   for agenda in agendas:
+       print("Agenda ID: {}".format(agenda.agenda_id))
+   return agendas
+
+
+def getAgendaByDate(date):
+   agendas = session.query(Agenda).filter_by(date=date)
+   for agenda in agendas:
+       return agenda
+
+
+def updateAgenda(id, agendaView):
+   agenda = session.query(Agenda).get(id)
+   agenda.chairperson = agendaView.chairperson
+   session.commit()
+
+def deleteAgenda(id):
+   session.query(Agenda).filter(Agenda.agenda_id == id).delete()
+   session.commit()
+
+
+
+@main.route('/getAgendas', methods=['POST', 'GET'])
 def getAgenda():
-
-    result = []
-    script = """SELECT * FROM sgtdevsaser.agenda"""
-    cs = conn.cursor()
-    cs.execute(script)
-    for row in cs:
-        result.append(row)
-
-    print(result)
-    return str(result)
+    agendas = selectAllAgendas()
+    return agendas
 
 
 @main.route('/viewAgendaByDate', methods=['POST', 'GET'])
 def viewAgendaByDate():
 
     date = request.form['date']
-    print(date)
+    agenda = getAgendaByDate(date)
 
-    result = []
-    script = """SELECT * FROM sgtdevsaser.agenda WHERE date = '{}'""".format(date)
-    cs = conn.cursor()
-    cs.execute(script)
-    for row in cs:
-        result.append(row)
+    return render_template('agenda_view.html',
+                           meetingName="SGT SASER",
+                           startTime=agenda.start_time,
+                           endTime=agenda.end_time,
+                           location=agenda.location,
+                           chairperson=agenda.chairperson,
+                           attendees=agenda.attendees,
+                           byInvitation=agenda.by_invitation,
+                           apologies=agenda.apologies_declines,
+                           minuteTaker=agenda.minute_taker,
+                           date=agenda.date,
+                           nextMeetingDate=agenda.next_meeting_date
+                           )
 
-    print(result)
-    # return str(result)
+@main.route('/addAgenda', methods=['POST', 'GET'])
+def addAgenda():
 
-    # [(1, 1, datetime.date(2021, 12, 10), datetime.timedelta(seconds=39600), datetime.timedelta(seconds=46800),
-    #   'Microsoft Teams', 'Craig Cadenhead', 'Courtley Whittaker (SGT)', 'Edwin Jacobs', 'Theo Mabaso', 'Helen Meyer',
-    #   datetime.date(2021, 12, 15))]
+    meetingName = request.form['name']
+    meetingDate = request.form['date']
+    startTime = request.form['starttime']
+    endTime = request.form['endtime']
+    location = request.form['locroom']
+    chairperson = request.form['chairperson']
+    attendees = request.form['attendees']
+    byInvite = request.form['byinvite']
+    apologies = request.form['apol']
+    minuteTaker = request.form['mintaker']
+    nextMeetingDate = request.form['nextdate']
 
-    # for column in result:
-    #
-    # response = {'meetingName': 'SGT SASER',
-    #             'location': }
-    # return
-    return render_template('agenda_view.html', location="Microsoft Teams")
+    addAgendaToDb(meetingName, meetingDate, startTime, endTime, location, chairperson, attendees, byInvite, apologies, minuteTaker, nextMeetingDate)
+
+
+    return render_template('agenda_set.html')
 
 
 main.run(debug=True)

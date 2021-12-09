@@ -170,59 +170,57 @@
 
             <div>
                 <span>Date of SASER to view:</span>
-                <input type="date" name="date" id="date" required>
+                <input type="date" name="date" id="date" required value="{{ date }}">
             </div>
 
             <div>
                <a href="/viewAgendaByDate"><button type="submit" id="newrow"> Select </button></a>
-{#                <button type="submit" id="newrow"> Select </button>#}
-
             </div>
         </form>
          <div>
                 <span>Meeting name:</span>
-                <input type="text" name="name" id="name" required placeholder="{{ test }}" value="{{ location }}">
+                <input type="text" name="name" id="name" value="{{ meetingName }}">
             </div>
 
             <div>
                 <span>Start Time:</span>
-                <input type="time" name="starttime" id="starttime" required>
+                <input type="time" name="starttime" id="starttime" value="{{ startTime }}">
             </div>
 
             <div>
                 <span>End Time:</span>
-                <input type="time" name="endtime" id="endtime" required>
+                <input type="time" name="endtime" id="endtime" required value="{{ endTime }}">
             </div>
 
             <div>
                 <span>Location/ room:</span>
-                <input type="text" name="locroom" id="locroom" required>
+                <input type="text" name="locroom" id="locroom" required value="{{ location }}">
             </div>
 
             <div>
                 <span>Chairperson:</span>
-                <input type="text" name="chairperson" id="chairperson" required>
+                <input type="text" name="chairperson" id="chairperson" required value="{{ chairperson}}">
             </div>
 
             <div><span>Attendees:</span></div>
 
             <div id="attend">
-                <input type="text" name="atendees" id="atendees" required>
+                <input type="text" name="atendees" id="atendees" required value="{{ attendees }}">
             </div>
 
             <div>
                 <span>By Invitation:</span>
-                <input type="text" name="byinvite" id="byinvite" required>
+                <input type="text" name="byinvite" id="byinvite" required value="{{ byInvitation }}">
             </div>
 
             <div>
                 <span>Apologies/ Declines:</span>
-                <input type="text" name="apol" id="apol" required>
+                <input type="text" name="apol" id="apol" required value="{{ apologies }}">
             </div>
 
             <div>
                 <span>Minute Taker:</span>
-                <input type="text" name="mintaker" id="mintaker" required>
+                <input type="text" name="mintaker" id="mintaker" required value="{{ minuteTaker }}">
             </div>
 
             <div><span>Agenda Topics</span></div>
@@ -262,7 +260,7 @@
 
             <div>
                 <span> Next Meeting Date:</span>
-                <input type="date" name="nextdate" id="nextdate" required>
+                <input type="date" name="nextdate" id="nextdate" required value="{{ nextMeetingDate }}">
             </div>
 
 
