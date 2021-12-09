@@ -1,10 +1,7 @@
-import sys
-
 import sqlalchemy
-from flask import Flask, render_template, redirect, request, session, url_for, jsonify
-import mariadb
+from flask import Flask, render_template, request, session
 
-from Agenda import Agenda
+from models.Agenda import Agenda
 
 main = Flask(__name__)
 
