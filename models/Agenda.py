@@ -18,5 +18,6 @@ class Agenda(Base):
    apologies_declines = Column(String(length=1000))
    minute_taker = Column(String(length=100))
    next_meeting_date = Column(Date)
-   # meeting = relationship('Meeting', primaryjoin='meeting_calendar.meeting_id == agenda.meeting_id', lazy='dynamic')
    meeting = relationship('Meeting', remote_side='Meeting.meeting_id')
+   agenda_topics = relationship('Agenda_Topics')
+
