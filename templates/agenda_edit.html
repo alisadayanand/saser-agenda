@@ -302,24 +302,23 @@ td {
                     <caption>Agenda Topics</caption>
                     <table id="table" border="1" onselectstart=return false ondragstart=return false>                  
                         <thead> 
-                        <tr>
-                            <th>Topic</th>
-                            <th>For Awareness</th>
-                            <th>RF Process or Vendor Selection</th>
-                            <th>Risk Management</th>
-                            <th>For Input</th>
-                            <th>For Approval</th>
-                            <th>Owner</th>
+                         <tr>
+                            {% for header in headings %}
+                            <th>{{ header }}</th>
+                            {% endfor %}
                         </tr>
                     </thead>
                         <tr>
-                            <td>a topic</td>
-                            <td>Yes</td>
-                            <td>No</td>
-                            <td>No</td>
-                            <td>Yes</td>
-                            <td>No</td>
-                            <td>alisa</td>
+                            {% for agenda_topic in agenda_topics %}
+                            <td>{{ agenda_topic.topic_name }}</td>
+                            <td>{{ agenda_topic.ForAwareness }}</td>
+                            <td>{{ agenda_topic.RfProcess }}</td>
+                            <td>{{ agenda_topic.RiskManagement }}</td>
+                            <td>{{ agenda_topic.ForInput }}</td>
+                            <td>{{ agenda_topic.ForApproval }}</td>
+                            <td>{{ agenda_topic.topic_owner }}</td>
+                            <input type="hidden" id="hiddenTopicId" name="hiddenTopicId" value="{{ agenda_topic.topic_id }}">
+                            {% endfor %}
                         </tr>
                     </table>
                 </div>

@@ -7,6 +7,7 @@ from models.Base import Session
 
 session = Session()
 selectedEditAgenda = ''
+page_state = ''
 
 main = Flask(__name__)
 
@@ -58,8 +59,9 @@ def getAgendaByDate(date):
     return session.query(Agenda).filter_by(date=date).first()
 
 
-def updateAgendaInDb(id, agendaView):
-    agenda = session.query(Agenda).get(id)
+def updateAgendaInDb(id, agendaView, topicView):
+    # session.no_autoflush()
+    agenda = session.query(Agenda).filter_by(agenda_id=id).first()
 
     agenda.date = agendaView.date
     agenda.start_time = agendaView.start_time
@@ -72,6 +74,19 @@ def updateAgendaInDb(id, agendaView):
     agenda.minute_taker = agendaView.minute_taker
     agenda.next_meeting_date = agendaView.next_meeting_date
 
+    for topic in agenda.agenda_topics:
+        if topic.topic_id == topicView.topic_id:
+            topic.minutes_id = 1
+            topic.topic_name = topicView.topic_name
+            topic.topic_owner = topicView.topic_owner
+            topic.ForAwareness = topicView.ForAwareness
+            topic.RfProcess = topicView.RfProcess
+            topic.RiskManagement = topicView.RiskManagement
+            topic.ForInput = topicView.ForInput
+            topic.ForApproval = topicView.ForApproval
+
+    # session.add(topicView)
+    session.autoflush()
     session.commit()
 
 
@@ -91,19 +106,9 @@ def selectAllAgenda_Topics():
     return session.query(Agenda_Topics).all()
 
 
-
-
-
-
-
-
 @main.route('/getAgenda_Topics', methods=['POST', 'GET'])
 def getAgenda_Topics():
     return selectAllAgenda_Topics()
-
-
-
-
 
 
 @main.route('/getAgendas', methods=['POST', 'GET'])
@@ -114,7 +119,9 @@ def getAgenda():
 
 @main.route('/viewAgendaByDate', methods=['POST', 'GET'])
 def viewAgendaByDate():
-    headings = ('Topics', 'For Awareness', 'RF Process or Vendor Selection', 'Risk Management', 'For Input', 'For Approval', 'Owner')
+    headings = (
+    'Topics', 'For Awareness', 'RF Process or Vendor Selection', 'Risk Management', 'For Input', 'For Approval',
+    'Owner')
 
     date = request.form['date']
     agenda = getAgendaByDate(date)
@@ -123,7 +130,12 @@ def viewAgendaByDate():
     global selectedEditAgenda
     selectedEditAgenda = agenda
 
-    if request.referrer == 'http://localhost:5000/view' or request.referrer == 'http://localhost:5000/viewAgendaByDate':
+    global page_state
+
+    if request.referrer == 'http://localhost:5000/view' or request.referrer == 'http://localhost:5000/edit':
+        page_state = request.referrer
+
+    if page_state == 'http://localhost:5000/view':
 
         return render_template('agenda_view.html',
                                meetingName="SGT SASER",
@@ -142,6 +154,7 @@ def viewAgendaByDate():
                                )
 
     else:
+
         return render_template('agenda_edit.html',
                                meetingName="SGT SASER",
                                startTime=agenda.start_time,
@@ -153,7 +166,9 @@ def viewAgendaByDate():
                                apologies=agenda.apologies_declines,
                                minuteTaker=agenda.minute_taker,
                                date=agenda.date,
-                               nextMeetingDate=agenda.next_meeting_date
+                               nextMeetingDate=agenda.next_meeting_date,
+                               headings=headings,
+                               agenda_topics=agenda.agenda_topics
                                )
 
 
@@ -192,6 +207,28 @@ def updateAgenda():
     minuteTaker = request.form['mintaker']
     nextMeetingDate = request.form['nextdate']
 
+    # topics to be saved with the agenda
+    topicName = request.form['topic']
+    topicAwareness = request.form['aware']
+    topicRf = request.form['rf']
+    topicRiskManagement = request.form['risk']
+    topicInput = request.form['input']
+    topicApproval = request.form['approve']
+    topicOwner = request.form['owner']
+    topicId = request.form['hiddenTopicId']
+
+    topicUpdated = Agenda_Topics(topic_id=topicId,
+                                 agenda_id=selectedEditAgenda.agenda_id,
+                                 minutes_id=1,
+                                 topic_name=topicName,
+                                 topic_owner=topicOwner,
+                                 ForAwareness=topicAwareness,
+                                 RfProcess=topicRf,
+                                 RiskManagement=topicRiskManagement,
+                                 ForInput=topicInput,
+                                 ForApproval=topicApproval,
+                                 agenda=selectedEditAgenda)
+
     agendaUpdated = Agenda(
         date=meetingDate,
         start_time=startTime,
@@ -204,7 +241,7 @@ def updateAgenda():
         minute_taker=minuteTaker,
         next_meeting_date=nextMeetingDate)
 
-    updateAgendaInDb(selectedEditAgenda.agenda_id, agendaUpdated)
+    updateAgendaInDb(selectedEditAgenda.agenda_id, agendaUpdated, topicUpdated)
 
 
 @main.route('/getMeetings', methods=['POST', 'GET'])

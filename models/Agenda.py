@@ -20,4 +20,3 @@ class Agenda(Base):
    next_meeting_date = Column(Date)
    meeting = relationship('Meeting', remote_side='Meeting.meeting_id')
    agenda_topics = relationship('Agenda_Topics')
-

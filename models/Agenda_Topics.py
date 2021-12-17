@@ -1,5 +1,5 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, Boolean
-from sqlalchemy.orm import relationship
+from sqlalchemy import Column, Integer, String, ForeignKey
+from sqlalchemy.orm import relationship, backref
 
 from models.Base import Base
 
@@ -11,13 +11,11 @@ class Agenda_Topics(Base):
    minutes_id = Column(Integer)
    topic_name = Column(String(length=100))
    topic_owner = Column(String(length=100))
-   ForAwareness = Column(Boolean)
-   RfProcess = Column(Boolean)
-   RiskManagement = Column(Boolean)
-   ForInput = Column(Boolean)
-   ForApproval = Column(Boolean)
-   # meeting = relationship('Meeting', remote_side='Meeting.meeting_id')
-   # agendas = relationship("Agenda", back_populates='agenda_topics')
+   ForAwareness = Column(String(length=100))
+   RfProcess = Column(String(length=100))
+   RiskManagement = Column(String(length=100))
+   ForInput = Column(String(length=100))
+   ForApproval = Column(String(length=100))
    agenda = relationship("Agenda", back_populates="agenda_topics")
 
 
