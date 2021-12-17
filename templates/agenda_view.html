@@ -35,7 +35,16 @@
     color: rgb(5, 5, 5);
     font-family: Roboto;
     font-style: bold;
-    margin-top: 500px;
+    margin-top: 900px;
+}
+.form-text h2{
+    color: rgb(5, 5, 5);
+    font-family: Roboto;
+    margin-top: 10px;
+    font-size: 20px;
+    font-style: normal;
+    text-align: center;
+    width: 1000px;
 }
 .form-text p{
     font-family: Roboto;
@@ -93,18 +102,69 @@
     margin-top: 10px;
 }
 
-#table{
-    width: 104%;
+.container{
+    margin: 0 auto;
+    table-layout:fixed;
+    font-family: Roboto;
+    font-size: 20px;
+    color: rgb(0, 0, 0);
+}           
+.tab{
+    text-align: center;
+    width: 900px;
+    color: rgb(0, 0, 0);
+}
+.tab-2{
     font-family: Roboto;
     font-style: normal;
-    border: 1px solid #f2f3f6;
+    font-size: 20px;
+    width: 900px;
+    border: 1px solid #000;
+    padding: 10px 20px 10px 10px;
+    color: rgb(0, 0, 0);
+}
+.tab-2 input{
+    font-family: Roboto;
+    font-style: normal;
+    font-size: 20px;
+    display: block;
+    margin-bottom: 10px;
+    width: 900px;
+    padding: 10px 20px 10px 10px;
+}
+tr{
+    transition:all .25s ease-in-out;
+    border: 1px solid #000;
+    border-right: solid 1px rgb(0, 0, 0); 
+    border-left: solid 1px rgb(0, 0, 0);
+    overflow:hidden; 
+    white-space:nowrap;
+}
+tr:hover{
+    background-color:#EEE;
+    cursor: pointer;
+}
+td {
+    border: 1px solid #000;
+    border-right: solid 1px rgb(0, 0, 0); 
+    border-left: solid 1px rgb(0, 0, 0);
+}
+
+#table{
+    font-family: Roboto;
+    font-style: normal;
+    border: 1px solid #000000;
+    border-right: solid 1px rgb(0, 0, 0); 
+    border-left: solid 1px rgb(0, 0, 0);
     height: 200px;
-    width: 950px;
+    width: 900px;
     font-size: 20px;
     color: rgb(0, 0, 0);
     padding: 3px 0 3px 10px;
     margin-top: 10px;
+    text-align: center;
 }
+
 
 #newrow{
     width: 950px;
@@ -125,6 +185,9 @@
 #submit{
     width: 100%;
     text-align: center;
+    font-family: Roboto;
+    font-style: normal;
+    font-size: 20px;
     width: 300px;
 }
 #submit input{
@@ -145,11 +208,20 @@
     color: #fff !important;
 }
 #submit input:active{
-    font-size: 19px;
+    font-family: Roboto;
+    font-style: normal;
+    text-align: center;
+    font-size: 20px;
+    width: 300px;
     background-color: rgb(46, 20, 5) !important;
     color: #fff !important;
 }
 
+#end{
+    text-align: center;
+    padding: 100px 100px 100px 100px;
+    width: 600px;
+}
 
 @media screen and (max-width:710px) {
     .main-form{
@@ -223,41 +295,183 @@
                 <input type="text" name="mintaker" id="mintaker" required disabled value="{{ minuteTaker }}">
             </div>
 
-            <div><span>Agenda Topics</span></div>
-
-            <div id="table">
-                <table class="table table-hover">
-                    <thead>
-                    <tr>
-                        <th>Topic</th>
-                        <th>Objective/ Outcome</th>
-                        <th>Owner</th>
-                    </tr>
+            <div class="container">
+                <div class="tab tab-1">
+                    <caption>Agenda Topics</caption>
+                    <table id="table" border="1" onselectstart=return false ondragstart=return false>                  
+                        <thead> 
+                        <tr>
+                            <th>Topic</th>
+                            <th>For Awareness</th>
+                            <th>RF Process or Vendor Selection</th>
+                            <th>Risk Management</th>
+                            <th>For Input</th>
+                            <th>For Approval</th>
+                            <th>Owner</th>
+                        </tr>
                     </thead>
+                        <tr>
+                            <td>a topic</td>
+                            <td>yes</td>
+                            <td>no</td>
+                            <td>no</td>
+                            <td>yes</td>
+                            <td>no</td>
+                            <td>alisa</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="tab tab-2">
+                    Topic:<input type="text" name="topic" id="topic">
+                    For Awareness: <select name="aware" id="aware">
+                        <option value="yes">yes</option>
+                        <option value="no">no</option>
+                      </select>
+                    RF Process or Vendor Selection: <select name="rf" id="rf">
+                        <option value="yes">yes</option>
+                        <option value="no">no</option>
+                      </select>
+                    Risk Management: <select name="risk" id="risk">
+                        <option value="yes">yes</option>
+                        <option value="no">no</option>
+                      </select>
+                    For Input: <select name="input" id="input">
+                        <option value="yes">yes</option>
+                        <option value="no">no</option>
+                      </select>
+                    For Approval: <select name="approve" id="approve">
+                        <option value="yes">yes</option>
+                        <option value="no">no</option>
+                      </select>
+                    Owner:<input type="text" name="owner" id="owner">
 
-                    <tbody>
-                    <tr>
-                        <td>Welcome & Apologies</td>
-                        <td><div>For Awareness </div>
-                            <div>For Input </div>
-                            <div>RF Process or Vendor Selection </div>
-                            <div>For Approval </div>
-                            <div>Risk Management </div></td>
-                        <td>-</td>
-
-                    </tr>
-                    </tbody>
-                </table>
-
+                    
+                    <button onclick="addHtmlTableRow();">Add</button>
+                    <button onclick="editHtmlTbleSelectedRow();">Edit</button>
+                    <button onclick="removeSelectedRow();">Remove</button>
+                </div>
             </div>
+            
+            <script>
+                
+                var rIndex,
+                    table = document.getElementById("table");
+                
+                // check the empty input
+                /*function checkEmptyInput()
+                {
+                    var isEmpty = false,
+                        fname = document.getElementById("fname").value,
+                        lname = document.getElementById("lname").value,
+                        age = document.getElementById("age").value;
+                
+                    if(fname === ""){
+                        alert("First Name Connot Be Empty");
+                        isEmpty = true;
+                    }
+                    else if(lname === ""){
+                        alert("Last Name Connot Be Empty");
+                        isEmpty = true;
+                    }
+                    else if(age === ""){
+                        alert("Age Connot Be Empty");
+                        isEmpty = true;
+                    }
+                    return isEmpty;
+                }*/
+                
+                // add Row
+                function addHtmlTableRow()
+                {
+                    // get the table by id
+                    // create a new row and cells
+                    // get value from input text
+                    // set the values into row cell's
+                    var newRow = table.insertRow(table.length),
+                        cell1 = newRow.insertCell(0),
+                        cell2 = newRow.insertCell(1),
+                        cell3 = newRow.insertCell(2),
+                        cell4 = newRow.insertCell(3),
+                        cell5 = newRow.insertCell(4),
+                        cell6 = newRow.insertCell(5),
+                        cell7 = newRow.insertCell(6),
+                        topic = document.getElementById("topic").value,
+                        aware = document.getElementById("aware").value,
+                        rf = document.getElementById("rf").value,
+                        risk = document.getElementById("risk").value,
+                        input = document.getElementById("input").value,
+                        approve = document.getElementById("approve").value,
+                        owner = document.getElementById("owner").value;
+                
+                    cell1.innerHTML = topic;
+                    cell2.innerHTML = aware;
+                    cell3.innerHTML = rf;
+                    cell4.innerHTML = risk;
+                    cell5.innerHTML = input;
+                    cell6.innerHTML = approve;
+                    cell7.innerHTML = owner;
+                    // call the function to set the event to the new row
+                    selectedRowToInput();
+                }
+                
+                // display selected row data into input text
+                function selectedRowToInput()
+                {
+                    
+                    for(var i = 1; i < table.rows.length; i++)
+                    {
+                        table.rows[i].onclick = function()
+                        {
+                          // get the seected row index
+                          rIndex = this.rowIndex;
+                          document.getElementById("topic").value = this.cells[0].innerHTML;
+                          document.getElementById("aware").value = this.cells[1].innerHTML;
+                          document.getElementById("rf").value = this.cells[2].innerHTML;
+                          document.getElementById("risk").value = this.cells[3].innerHTML;
+                          document.getElementById("input").value = this.cells[4].innerHTML
+                          document.getElementById("approve").value = this.cells[5].innerHTML;
+                          document.getElementById("owner").value = this.cells[6].innerHTML;
+                        };
+                    }
+                }
+                selectedRowToInput();
+                
+                function editHtmlTbleSelectedRow()
+                {
+                    var topic = document.getElementById("topic").value,
+                        aware = document.getElementById("aware").value,
+                        rf = document.getElementById("rf").value,
+                        risk = document.getElementById("risk").value,
+                        input = document.getElementById("input").value,
+                        approve = document.getElementById("approve").value,
+                        owner = document.getElementById("owner").value;
+
+                    table.rows[rIndex].cells[0].innerHTML = topic;
+                    table.rows[rIndex].cells[1].innerHTML = aware;
+                    table.rows[rIndex].cells[2].innerHTML = rf;
+                    table.rows[rIndex].cells[3].innerHTML = risk;
+                    table.rows[rIndex].cells[4].innerHTML = input;
+                    table.rows[rIndex].cells[5].innerHTML = approve;
+                    table.rows[rIndex].cells[6].innerHTML = owner;
+                  
+                }
+                
+                function removeSelectedRow()
+                {
+                    table.deleteRow(rIndex);
+                    // clear input text
+                    document.getElementById("topic").value = "";
+                    document.getElementById("aware").value = "";
+                    document.getElementById("rf").value = "";
+                    document.getElementById("risk").value = "";
+                    document.getElementById("input").value = "";
+                    document.getElementById("approve").value = "";
+                    document.getElementById("owner").value = "";
+                }
+            </script>
 
 
-
-
-            <div id="newrow">
-                <input type="button" value="Add new row" id="newrow">
-            </div>
-
+            <div class="end">
             <div>
                 <span> Next Meeting Date:</span>
                 <input type="date" name="nextdate" id="nextdate" required value="{{ nextMeetingDate }}">
@@ -265,8 +479,9 @@
 
 
             <div id="submit">
-                <input type="gendoc" value="Generate Document" id="gendoc">
+                <button type="gendoc" id="gendoc">Generate Document</button>
             </div>
+        </div>
     </div>
 </div>
 
