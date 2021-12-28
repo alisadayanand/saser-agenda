@@ -33,21 +33,17 @@ def view():
     return render_template('agenda_view.html')
 
 
-def addAgendaToDb(meetingName, meetingDate, startTime, endTime, location, chairperson, attendees, byInvitation,
-                  apologies, minuteTaker, nextMeetingDate):
-    newAgenda = Agenda(
-        meeting_id=1,
-        date=meetingDate,
-        start_time=startTime,
-        end_time=endTime,
-        location=location,
-        chairperson=chairperson,
-        attendees=attendees,
-        by_invitation=byInvitation,
-        apologies_declines=apologies,
-        minute_taker=minuteTaker,
-        next_meeting_date=nextMeetingDate)
+def addAgendaAndTopicsToDb(newAgenda, newTopic):
+
     session.add(newAgenda)
+    session.flush()
+
+    session.refresh(newAgenda)
+
+    newTopic.agenda_id = newAgenda.agenda_id
+    newTopic.minutes_id = 1
+
+    session.add(newTopic)
     session.commit()
 
 
@@ -59,9 +55,11 @@ def getAgendaByDate(date):
     return session.query(Agenda).filter_by(date=date).first()
 
 
-def updateAgendaInDb(id, agendaView, topicView):
-    # session.no_autoflush()
-    agenda = session.query(Agenda).filter_by(agenda_id=id).first()
+def updateAgendaInDb(id, topic_id, agendaView, topicView):
+
+    agenda = session.query(Agenda).filter(Agenda.agenda_id == id).first()
+    topic = session.query(Agenda_Topics).filter(Agenda_Topics.topic_id == topic_id).first()
+
 
     agenda.date = agendaView.date
     agenda.start_time = agendaView.start_time
@@ -74,24 +72,29 @@ def updateAgendaInDb(id, agendaView, topicView):
     agenda.minute_taker = agendaView.minute_taker
     agenda.next_meeting_date = agendaView.next_meeting_date
 
-    for topic in agenda.agenda_topics:
-        if topic.topic_id == topicView.topic_id:
-            topic.minutes_id = 1
-            topic.topic_name = topicView.topic_name
-            topic.topic_owner = topicView.topic_owner
-            topic.ForAwareness = topicView.ForAwareness
-            topic.RfProcess = topicView.RfProcess
-            topic.RiskManagement = topicView.RiskManagement
-            topic.ForInput = topicView.ForInput
-            topic.ForApproval = topicView.ForApproval
+    topic.minutes_id = id
+    topic.topic_name = topicView.topic_name
+    topic.agenda_id = id
+    topic.topic_owner = topicView.topic_owner
+    topic.ForAwareness = topicView.ForAwareness
+    topic.RfProcess = topicView.RfProcess
+    topic.RiskManagement = topicView.RiskManagement
+    topic.ForInput = topicView.ForInput
+    topic.ForApproval = topicView.ForApproval
 
-    # session.add(topicView)
-    session.autoflush()
+    session.add(agenda)
+    session.commit()
+
+    session.add(topic)
     session.commit()
 
 
 def deleteAgenda(id):
     session.query(Agenda).filter(Agenda.agenda_id == id).delete()
+    session.commit()
+
+def deleteTopic(id):
+    session.query(Agenda_Topics).filter(Agenda_Topics.topic_id == id).delete()
     session.commit()
 
 
@@ -186,8 +189,36 @@ def addAgenda():
     minuteTaker = request.form['mintaker']
     nextMeetingDate = request.form['nextdate']
 
-    addAgendaToDb(meetingName, meetingDate, startTime, endTime, location, chairperson, attendees, byInvite, apologies,
-                  minuteTaker, nextMeetingDate)
+    newAgenda = Agenda(
+        meeting_id=1,
+        date=meetingDate,
+        start_time=startTime,
+        end_time=endTime,
+        location=location,
+        chairperson=chairperson,
+        attendees=attendees,
+        by_invitation=byInvite,
+        apologies_declines=apologies,
+        minute_taker=minuteTaker,
+        next_meeting_date=nextMeetingDate)
+
+    topicName = request.form['topic']
+    topicAwareness = request.form['aware']
+    topicRf = request.form['rf']
+    topicRiskManagement = request.form['risk']
+    topicInput = request.form['input']
+    topicApproval = request.form['approve']
+    topicOwner = request.form['owner']
+
+    newTopic = Agenda_Topics(topic_name=topicName,
+                             topic_owner=topicOwner,
+                             ForAwareness=topicAwareness,
+                             RfProcess=topicRf,
+                             RiskManagement=topicRiskManagement,
+                             ForInput=topicInput,
+                             ForApproval=topicApproval)
+
+    addAgendaAndTopicsToDb(newAgenda, newTopic)
 
     return render_template('agenda_set.html')
 
@@ -217,8 +248,19 @@ def updateAgenda():
     topicOwner = request.form['owner']
     topicId = request.form['hiddenTopicId']
 
-    topicUpdated = Agenda_Topics(topic_id=topicId,
-                                 agenda_id=selectedEditAgenda.agenda_id,
+    # topicUpdated = Agenda_Topics(topic_id=int(topicId),
+    #                              agenda_id=selectedEditAgenda.agenda_id,
+    #                              minutes_id=1,
+    #                              topic_name=topicName,
+    #                              topic_owner=topicOwner,
+    #                              ForAwareness=topicAwareness,
+    #                              RfProcess=topicRf,
+    #                              RiskManagement=topicRiskManagement,
+    #                              ForInput=topicInput,
+    #                              ForApproval=topicApproval,
+    #                              agenda=selectedEditAgenda)
+
+    topicUpdated = Agenda_Topics(agenda_id=selectedEditAgenda.agenda_id,
                                  minutes_id=1,
                                  topic_name=topicName,
                                  topic_owner=topicOwner,
@@ -226,8 +268,7 @@ def updateAgenda():
                                  RfProcess=topicRf,
                                  RiskManagement=topicRiskManagement,
                                  ForInput=topicInput,
-                                 ForApproval=topicApproval,
-                                 agenda=selectedEditAgenda)
+                                 ForApproval=topicApproval)
 
     agendaUpdated = Agenda(
         date=meetingDate,
@@ -241,7 +282,7 @@ def updateAgenda():
         minute_taker=minuteTaker,
         next_meeting_date=nextMeetingDate)
 
-    updateAgendaInDb(selectedEditAgenda.agenda_id, agendaUpdated, topicUpdated)
+    updateAgendaInDb(selectedEditAgenda.agenda_id, topicId, agendaUpdated, topicUpdated)
 
 
 @main.route('/getMeetings', methods=['POST', 'GET'])

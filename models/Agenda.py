@@ -19,4 +19,4 @@ class Agenda(Base):
    minute_taker = Column(String(length=100))
    next_meeting_date = Column(Date)
    meeting = relationship('Meeting', remote_side='Meeting.meeting_id')
-   agenda_topics = relationship('Agenda_Topics')
+   agenda_topics = relationship('Agenda_Topics', backref='agenda', lazy='select')

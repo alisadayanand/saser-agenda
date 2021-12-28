@@ -16,6 +16,5 @@ class Agenda_Topics(Base):
    RiskManagement = Column(String(length=100))
    ForInput = Column(String(length=100))
    ForApproval = Column(String(length=100))
-   agenda = relationship("Agenda", back_populates="agenda_topics")
 
 
