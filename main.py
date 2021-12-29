@@ -27,7 +27,9 @@ def home():
 @main.route('/set', methods=['POST', 'GET'])
 def set():
     try:
-        return render_template('agenda_set.html')
+        meetings = getMeetings()
+        return render_template('agenda_set.html', meetings=meetings)
+        # return render_template('agenda_set.html')
 
     except Exception as e:
         page_not_found(e)
@@ -83,7 +85,7 @@ def viewAgendaByDate():
     if page_state == 'http://localhost:5000/view':
         try:
             if not agenda:
-                flash("No agendas found for this date", "warning")
+                flash("No agenda found for this date", "warning")
                 return render_template('agenda_view.html')
 
             return render_template('agenda_view.html',
@@ -107,7 +109,7 @@ def viewAgendaByDate():
     else:
         try:
             if not agenda:
-                flash("No agendas found for this date", "warning")
+                flash("No agenda found for this date", "warning")
                 return render_template('agenda_edit.html')
 
             return render_template('agenda_edit.html',
@@ -131,7 +133,8 @@ def viewAgendaByDate():
 
 @main.route('/addAgenda', methods=['POST', 'GET'])
 def addAgenda():
-    meetingName = request.form['name']
+    # meetingId = request.form['hiddenMeetingId']
+    meetingId = request.form['name']
     meetingDate = request.form['date']
     startTime = request.form['starttime']
     endTime = request.form['endtime']
@@ -144,7 +147,7 @@ def addAgenda():
     nextMeetingDate = request.form['nextdate']
 
     newAgenda = Agenda(
-        meeting_id=1,
+        meeting_id=meetingId,
         date=meetingDate,
         start_time=startTime,
         end_time=endTime,
@@ -176,7 +179,7 @@ def addAgenda():
 
     try:
         flash("Agenda created successfully", "success")
-        return render_template('agenda_set.html')
+        return render_template('agenda_set.html', meetings=getMeetings())
 
     except Exception as e:
         page_not_found(e)
@@ -242,8 +245,15 @@ def updateAgenda():
 @main.route('/getMeetings', methods=['POST', 'GET'])
 def getMeetings():
     meetings = selectAllMeetings()
-    return jsonify(meetings=[meeting.serialize for meeting in meetings])
+    # return jsonify(meetings=[meeting.serialize for meeting in meetings])
+    return meetings
 
+
+@main.route('/getMeetingsWithView', methods=['POST', 'GET'])
+def getMeetingsWithView():
+    date = request.form["date"]
+    meeting = getMeetingByDate(date)
+    return render_template("agenda_set.html", agenda=meeting.agenda)
 
 @main.errorhandler(404)
 def page_not_found(e):
@@ -321,6 +331,9 @@ def selectAllMeetings():
     for meeting in meetings:
         print("Meeting ID: {}".format(meeting.meeting_id))
     return meetings
+
+def getMeetingByDate(date):
+    return session.query(Meeting).filter_by(meeting_date=date).first()
 
 
 def selectAllAgenda_Topics():

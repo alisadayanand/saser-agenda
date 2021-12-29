@@ -11,7 +11,7 @@ class Meeting(Base):
     meeting_date = Column(Date)
     meeting_start_time = Column(Time)
     meeting_end_time = Column(Time)
-    agendas = relationship("Agenda", back_populates='meeting')
+    agenda = relationship("Agenda", uselist=False, back_populates='meeting')
 
     @property
     def serialize(self):
