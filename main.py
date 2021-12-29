@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, flash
+from flask import Flask, render_template, request, flash, jsonify
 
 from models.Agenda import Agenda
 from models.Agenda_Topics import Agenda_Topics
@@ -10,6 +10,8 @@ selectedEditAgenda = ''
 page_state = ''
 
 main = Flask(__name__)
+
+# Routes
 
 
 @main.route('/home', methods=['POST', 'GET'])
@@ -49,89 +51,15 @@ def view():
         page_not_found(e)
 
 
-def addAgendaAndTopicsToDb(newAgenda, newTopic):
-    session.add(newAgenda)
-    session.flush()
-
-    session.refresh(newAgenda)
-
-    newTopic.agenda_id = newAgenda.agenda_id
-    newTopic.minutes_id = 1
-
-    session.add(newTopic)
-    session.commit()
-
-
-def selectAllAgendas():
-    return session.query(Agenda).all()
-
-
-def getAgendaByDate(date):
-    return session.query(Agenda).filter_by(date=date).first()
-
-
-def updateAgendaInDb(id, topic_id, agendaView, topicView):
-    agenda = session.query(Agenda).filter(Agenda.agenda_id == id).first()
-    topic = session.query(Agenda_Topics).filter(Agenda_Topics.topic_id == topic_id).first()
-
-    agenda.date = agendaView.date
-    agenda.start_time = agendaView.start_time
-    agenda.end_time = agendaView.end_time
-    agenda.location = agendaView.location
-    agenda.chairperson = agendaView.chairperson
-    agenda.attendees = agendaView.attendees
-    agenda.by_invitation = agendaView.by_invitation
-    agenda.apologies_declines = agendaView.apologies_declines
-    agenda.minute_taker = agendaView.minute_taker
-    agenda.next_meeting_date = agendaView.next_meeting_date
-
-    topic.minutes_id = 1
-    topic.topic_name = topicView.topic_name
-    topic.agenda_id = id
-    topic.topic_owner = topicView.topic_owner
-    topic.ForAwareness = topicView.ForAwareness
-    topic.RfProcess = topicView.RfProcess
-    topic.RiskManagement = topicView.RiskManagement
-    topic.ForInput = topicView.ForInput
-    topic.ForApproval = topicView.ForApproval
-
-    session.add(agenda)
-    session.commit()
-
-    session.add(topic)
-    session.commit()
-
-
-def deleteAgenda(id):
-    session.query(Agenda).filter(Agenda.agenda_id == id).delete()
-    session.commit()
-
-
-def deleteTopic(id):
-    session.query(Agenda_Topics).filter(Agenda_Topics.topic_id == id).delete()
-    session.commit()
-
-
-def selectAllMeetings():
-    meetings = session.query(Meeting).all()
-    for meeting in meetings:
-        print("Meeting ID: {}".format(meeting.meeting_id))
-    return meetings
-
-
-def selectAllAgenda_Topics():
-    return session.query(Agenda_Topics).all()
-
-
 @main.route('/getAgenda_Topics', methods=['POST', 'GET'])
 def getAgenda_Topics():
-    return selectAllAgenda_Topics()
+    return jsonify(topics=[topic.serialize for topic in selectAllAgenda_Topics()])
 
 
 @main.route('/getAgendas', methods=['POST', 'GET'])
 def getAgenda():
     agendas = selectAllAgendas()
-    return agendas
+    return jsonify(agendas=[agenda.serialize for agenda in agendas])
 
 
 @main.route('/viewAgendaByDate', methods=['POST', 'GET'])
@@ -314,7 +242,7 @@ def updateAgenda():
 @main.route('/getMeetings', methods=['POST', 'GET'])
 def getMeetings():
     meetings = selectAllMeetings()
-    return meetings
+    return jsonify(meetings=[meeting.serialize for meeting in meetings])
 
 
 @main.errorhandler(404)
@@ -322,6 +250,81 @@ def page_not_found(e):
     flash("404 page not found", "danger")
     return render_template("404.html")
 
+
+# CRUD
+
+def addAgendaAndTopicsToDb(newAgenda, newTopic):
+    session.add(newAgenda)
+    session.flush()
+
+    session.refresh(newAgenda)
+
+    newTopic.agenda_id = newAgenda.agenda_id
+    newTopic.minutes_id = 1
+
+    session.add(newTopic)
+    session.commit()
+
+
+def selectAllAgendas():
+    return session.query(Agenda).all()
+
+
+def getAgendaByDate(date):
+    return session.query(Agenda).filter_by(date=date).first()
+
+
+def updateAgendaInDb(id, topic_id, agendaView, topicView):
+    agenda = session.query(Agenda).filter(Agenda.agenda_id == id).first()
+    topic = session.query(Agenda_Topics).filter(Agenda_Topics.topic_id == topic_id).first()
+
+    agenda.date = agendaView.date
+    agenda.start_time = agendaView.start_time
+    agenda.end_time = agendaView.end_time
+    agenda.location = agendaView.location
+    agenda.chairperson = agendaView.chairperson
+    agenda.attendees = agendaView.attendees
+    agenda.by_invitation = agendaView.by_invitation
+    agenda.apologies_declines = agendaView.apologies_declines
+    agenda.minute_taker = agendaView.minute_taker
+    agenda.next_meeting_date = agendaView.next_meeting_date
+
+    topic.minutes_id = 1
+    topic.topic_name = topicView.topic_name
+    topic.agenda_id = id
+    topic.topic_owner = topicView.topic_owner
+    topic.ForAwareness = topicView.ForAwareness
+    topic.RfProcess = topicView.RfProcess
+    topic.RiskManagement = topicView.RiskManagement
+    topic.ForInput = topicView.ForInput
+    topic.ForApproval = topicView.ForApproval
+
+    session.add(agenda)
+    session.commit()
+
+    session.add(topic)
+    session.commit()
+
+
+def deleteAgenda(id):
+    session.query(Agenda).filter(Agenda.agenda_id == id).delete()
+    session.commit()
+
+
+def deleteTopic(id):
+    session.query(Agenda_Topics).filter(Agenda_Topics.topic_id == id).delete()
+    session.commit()
+
+
+def selectAllMeetings():
+    meetings = session.query(Meeting).all()
+    for meeting in meetings:
+        print("Meeting ID: {}".format(meeting.meeting_id))
+    return meetings
+
+
+def selectAllAgenda_Topics():
+    return session.query(Agenda_Topics).all()
 
 if __name__ == "__main__":
     # Quick test configuration. Please use proper Flask configuration options
