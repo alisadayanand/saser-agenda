@@ -1,9 +1,9 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, flash
 
 from models.Agenda import Agenda
 from models.Agenda_Topics import Agenda_Topics
-from models.Meeting import Meeting
 from models.Base import Session
+from models.Meeting import Meeting
 
 session = Session()
 selectedEditAgenda = ''
@@ -15,26 +15,41 @@ main = Flask(__name__)
 @main.route('/home', methods=['POST', 'GET'])
 @main.route('/', methods=['POST', 'GET'])
 def home():
-    return render_template('index.html')
+    try:
+        return render_template('index.html')
+
+    except Exception as e:
+        page_not_found(e)
 
 
 @main.route('/set', methods=['POST', 'GET'])
 def set():
-    return render_template('agenda_set.html')
+    try:
+        return render_template('agenda_set.html')
+
+    except Exception as e:
+        page_not_found(e)
 
 
 @main.route('/edit', methods=['POST', 'GET'])
 def edit():
-    return render_template('agenda_edit.html')
+    try:
+        return render_template('agenda_edit.html')
+
+    except Exception as e:
+        page_not_found(e)
 
 
 @main.route('/view', methods=['POST', 'GET'])
 def view():
-    return render_template('agenda_view.html')
+    try:
+        return render_template('agenda_view.html')
+
+    except Exception as e:
+        page_not_found(e)
 
 
 def addAgendaAndTopicsToDb(newAgenda, newTopic):
-
     session.add(newAgenda)
     session.flush()
 
@@ -56,10 +71,8 @@ def getAgendaByDate(date):
 
 
 def updateAgendaInDb(id, topic_id, agendaView, topicView):
-
     agenda = session.query(Agenda).filter(Agenda.agenda_id == id).first()
     topic = session.query(Agenda_Topics).filter(Agenda_Topics.topic_id == topic_id).first()
-
 
     agenda.date = agendaView.date
     agenda.start_time = agendaView.start_time
@@ -72,7 +85,7 @@ def updateAgendaInDb(id, topic_id, agendaView, topicView):
     agenda.minute_taker = agendaView.minute_taker
     agenda.next_meeting_date = agendaView.next_meeting_date
 
-    topic.minutes_id = id
+    topic.minutes_id = 1
     topic.topic_name = topicView.topic_name
     topic.agenda_id = id
     topic.topic_owner = topicView.topic_owner
@@ -92,6 +105,7 @@ def updateAgendaInDb(id, topic_id, agendaView, topicView):
 def deleteAgenda(id):
     session.query(Agenda).filter(Agenda.agenda_id == id).delete()
     session.commit()
+
 
 def deleteTopic(id):
     session.query(Agenda_Topics).filter(Agenda_Topics.topic_id == id).delete()
@@ -123,8 +137,8 @@ def getAgenda():
 @main.route('/viewAgendaByDate', methods=['POST', 'GET'])
 def viewAgendaByDate():
     headings = (
-    'Topics', 'For Awareness', 'RF Process or Vendor Selection', 'Risk Management', 'For Input', 'For Approval',
-    'Owner')
+        'Topics', 'For Awareness', 'RF Process or Vendor Selection', 'Risk Management', 'For Input', 'For Approval',
+        'Owner')
 
     date = request.form['date']
     agenda = getAgendaByDate(date)
@@ -139,40 +153,52 @@ def viewAgendaByDate():
         page_state = request.referrer
 
     if page_state == 'http://localhost:5000/view':
+        try:
+            if not agenda:
+                flash("No agendas found for this date", "warning")
+                return render_template('agenda_view.html')
 
-        return render_template('agenda_view.html',
-                               meetingName="SGT SASER",
-                               startTime=agenda.start_time,
-                               endTime=agenda.end_time,
-                               location=agenda.location,
-                               chairperson=agenda.chairperson,
-                               attendees=agenda.attendees,
-                               byInvitation=agenda.by_invitation,
-                               apologies=agenda.apologies_declines,
-                               minuteTaker=agenda.minute_taker,
-                               date=agenda.date,
-                               nextMeetingDate=agenda.next_meeting_date,
-                               headings=headings,
-                               agenda_topics=agenda.agenda_topics
-                               )
+            return render_template('agenda_view.html',
+                                   meetingName="SGT SASER",
+                                   startTime=agenda.start_time,
+                                   endTime=agenda.end_time,
+                                   location=agenda.location,
+                                   chairperson=agenda.chairperson,
+                                   attendees=agenda.attendees,
+                                   byInvitation=agenda.by_invitation,
+                                   apologies=agenda.apologies_declines,
+                                   minuteTaker=agenda.minute_taker,
+                                   date=agenda.date,
+                                   nextMeetingDate=agenda.next_meeting_date,
+                                   headings=headings,
+                                   agenda_topics=agenda.agenda_topics
+                                   )
+        except Exception as e:
+            page_not_found(e)
 
     else:
+        try:
+            if not agenda:
+                flash("No agendas found for this date", "warning")
+                return render_template('agenda_edit.html')
 
-        return render_template('agenda_edit.html',
-                               meetingName="SGT SASER",
-                               startTime=agenda.start_time,
-                               endTime=agenda.end_time,
-                               location=agenda.location,
-                               chairperson=agenda.chairperson,
-                               attendees=agenda.attendees,
-                               byInvitation=agenda.by_invitation,
-                               apologies=agenda.apologies_declines,
-                               minuteTaker=agenda.minute_taker,
-                               date=agenda.date,
-                               nextMeetingDate=agenda.next_meeting_date,
-                               headings=headings,
-                               agenda_topics=agenda.agenda_topics
-                               )
+            return render_template('agenda_edit.html',
+                                   meetingName="SGT SASER",
+                                   startTime=agenda.start_time,
+                                   endTime=agenda.end_time,
+                                   location=agenda.location,
+                                   chairperson=agenda.chairperson,
+                                   attendees=agenda.attendees,
+                                   byInvitation=agenda.by_invitation,
+                                   apologies=agenda.apologies_declines,
+                                   minuteTaker=agenda.minute_taker,
+                                   date=agenda.date,
+                                   nextMeetingDate=agenda.next_meeting_date,
+                                   headings=headings,
+                                   agenda_topics=agenda.agenda_topics
+                                   )
+        except Exception as e:
+            page_not_found(e)
 
 
 @main.route('/addAgenda', methods=['POST', 'GET'])
@@ -220,7 +246,12 @@ def addAgenda():
 
     addAgendaAndTopicsToDb(newAgenda, newTopic)
 
-    return render_template('agenda_set.html')
+    try:
+        flash("Agenda created successfully", "success")
+        return render_template('agenda_set.html')
+
+    except Exception as e:
+        page_not_found(e)
 
 
 @main.route('/updateAgenda', methods=['POST', 'GET'])
@@ -248,18 +279,6 @@ def updateAgenda():
     topicOwner = request.form['owner']
     topicId = request.form['hiddenTopicId']
 
-    # topicUpdated = Agenda_Topics(topic_id=int(topicId),
-    #                              agenda_id=selectedEditAgenda.agenda_id,
-    #                              minutes_id=1,
-    #                              topic_name=topicName,
-    #                              topic_owner=topicOwner,
-    #                              ForAwareness=topicAwareness,
-    #                              RfProcess=topicRf,
-    #                              RiskManagement=topicRiskManagement,
-    #                              ForInput=topicInput,
-    #                              ForApproval=topicApproval,
-    #                              agenda=selectedEditAgenda)
-
     topicUpdated = Agenda_Topics(agenda_id=selectedEditAgenda.agenda_id,
                                  minutes_id=1,
                                  topic_name=topicName,
@@ -284,6 +303,13 @@ def updateAgenda():
 
     updateAgendaInDb(selectedEditAgenda.agenda_id, topicId, agendaUpdated, topicUpdated)
 
+    try:
+        flash("Agenda edited successfully", "success")
+        return render_template("agenda_edit.html")
+
+    except Exception as e:
+        page_not_found(e)
+
 
 @main.route('/getMeetings', methods=['POST', 'GET'])
 def getMeetings():
@@ -291,4 +317,17 @@ def getMeetings():
     return meetings
 
 
-main.run(debug=True)
+@main.errorhandler(404)
+def page_not_found(e):
+    flash("404 page not found", "danger")
+    return render_template("404.html")
+
+
+if __name__ == "__main__":
+    # Quick test configuration. Please use proper Flask configuration options
+    # in production settings, and use a separate file or environment variables
+    # to manage the secret key!
+    main.secret_key = 'super secret key'
+    main.config['SESSION_TYPE'] = 'filesystem'
+
+    main.run(debug=True)

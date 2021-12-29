@@ -317,6 +317,7 @@ td {
                             <td>{{ agenda_topic.ForInput }}</td>
                             <td>{{ agenda_topic.ForApproval }}</td>
                             <td>{{ agenda_topic.topic_owner }}</td>
+                            <input type="hidden" id="hiddenTopicId" name="hiddenTopicId" value="{{ agenda_topic.topic_id }}">
                         </tr>
                         {% endfor %}
                     </table>
