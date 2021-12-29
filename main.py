@@ -334,3 +334,18 @@ if __name__ == "__main__":
     main.config['SESSION_TYPE'] = 'filesystem'
 
     main.run(debug=True)
+
+
+# TODO:
+#
+#  attendees spelling error (DONE)
+#
+# error messages when view or edit wrong date (DONE)
+#
+# success message when setting new agenda (DONE)
+#
+# error handling blank fields (DONE)
+#
+# max varchar text fields in backend
+#
+# meeting id dropdown in set agenda. Frontend and backend
