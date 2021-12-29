@@ -253,7 +253,7 @@
 
         </div>
         <div class="main-form">
-            <form action="http://localhost:5000/addAgenda" method="post">
+            <form action="/getMeetingsWithView" method="post">
                 <div>
                     <span>Meeting Date:</span>
                     <select id="date" name=date method="GET">
@@ -264,48 +264,59 @@
                 </div>
                 <div>
                     <span>Meeting name:</span>
-                    <input type="text" name="name" id="name" required>
+                    <input type="text" name="name" id="name" disabled value="{{ meeting_name }}">
                 </div>
 
                 <div>
                     <span>Start Time:</span>
-                    <input type="time" name="starttime" id="starttime" required>
+                    <input type="time" name="starttime" id="starttime" disabled value="{{ meeting_start_time }}">
                 </div>
 
                 <div>
                     <span>End Time:</span>
-                    <input type="time" name="endtime" id="endtime" required>
+                    <input type="time" name="endtime" id="endtime" disabled value="{{ meeting_end_time }}">
                 </div>
+
+
+                <div id="submitMeeting">
+                    <a href="/getMeetingsWithView">
+                        <button type="submit" id="confirmMeeting"> Confirm Meeting Date</button>
+                    </a>
+                </div>
+            </form>
+
+            <form action="http://localhost:5000/addAgenda" method="post">
+
 
                 <div>
                     <span>Location/ room:</span>
-                    <input type="text" name="locroom" id="locroom" required>
+                    <input type="text" name="locroom" id="locroom" value="{{ agenda_location }}" required>
                 </div>
 
                 <div>
                     <span>Chairperson:</span>
-                    <input type="text" name="chairperson" id="chairperson" required>
+                    <input type="text" name="chairperson" id="chairperson" value="{{ agenda_chairperson }}" required>
                 </div>
 
                 <div><span>Attendees:</span></div>
 
                 <div id="attend">
-                    <input type="text" name="attendees" id="attendees" required>
+                    <input type="text" name="attendees" id="attendees" value="{{ agenda_attendees }}" required>
                 </div>
 
                 <div>
                     <span>By Invitation:</span>
-                    <input type="text" name="byinvite" id="byinvite" required>
+                    <input type="text" name="byinvite" id="byinvite" value="{{ agenda_by_invitation }}" required>
                 </div>
 
                 <div>
                     <span>Apologies/ Declines:</span>
-                    <input type="text" name="apol" id="apol" required>
+                    <input type="text" name="apol" id="apol" value="{{ agenda_apologies_declines }}" required>
                 </div>
 
                 <div>
                     <span>Minute Taker:</span>
-                    <input type="text" name="mintaker" id="mintaker" required>
+                    <input type="text" name="mintaker" id="mintaker" value="{{ agenda_minute_taker }}" required>
                 </div>
 
 

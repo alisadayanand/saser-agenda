@@ -1,244 +1,260 @@
-{%extends "index.html"%}
-{%block content%}
+{% extends "index.html" %}
+{% block content %}
 
-<style>
+    <style>
 
-*{
-    margin: 0;
-    padding: 0;
-}
+        * {
+            margin: 0;
+            padding: 0;
+        }
 
-.main_bg{
-    max-width: 1280px;
-    height: 1000px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    margin: 0 auto;
-    min-height: 100%;
-}
+        .main_bg {
+            max-width: 1280px;
+            height: 1000px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin: 0 auto;
+            min-height: 100%;
+        }
 
-.form{
-    width: 1000px;
-}
+        .form {
+            width: 1000px;
+        }
 
-.form-text{
-    text-align: center;
-    margin: 0 0 40px 0;
-}
-.form-text h1 span img{
-    margin: 0 10px;
+        .form-text {
+            text-align: center;
+            margin: 0 0 40px 0;
+        }
 
-}
-.form-text h1{
-    color: rgb(5, 5, 5);
-    font-family: Roboto;
-    font-style: bold;
-    margin-top: 500px;
-}
-.form-text h2{
-    color: rgb(5, 5, 5);
-    font-family: Roboto;
-    margin-top: 10px;
-    font-size: 20px;
-    font-style: normal;
-    text-align: center;
-    width: 1000px;
-}
-.form-text p{
-    font-family: Roboto;
-      font-style: bold;
-    font-size: large;
-}
+        .form-text h1 span img {
+            margin: 0 10px;
 
-.main-form div{
-    margin: 10px 10px;
-    width: 300px;
-    display: inline-block;
-}
-.main-form div input {
-    width: 100%;
-    font-family: Roboto;
-    font-style: normal;
-    background: #f2f3f6;
-    border: 1px solid #f2f3f6;
-    font-size: 20px;
-    color: rgb(0, 0, 0);
-    outline: none;
-    padding: 3px 0 3px 10px;
-    margin-top: 10px;
-}
-.main-form div select{
-    width: 104%;
-    font-family: Roboto;
-    font-style: normal;
-    background: none;
-    border: 1px solid #f2f3f6;
-    font-size: 20px;
-    color: rgb(0, 0, 0);
-    outline: none;
-    padding: 3px 0 3px 10px;
-    margin-top: 10px;
-}
-.main-form div span{
-    width: 100%;
-    font-family: Roboto;
-    font-style: normal;
-    color: rgb(0, 0, 0);
-    font-size: 25px;
-}
+        }
 
-#attend{
-    width: 104%;
-    font-family: Roboto;
-    font-style: normal;
-    background: #f2f3f6;
-    height: 200px;
-    width: 950px;
-    font-size: 20px;
-    color: rgb(0, 0, 0);
-    padding: 3px 0 3px 10px;
-    margin-top: 10px;
-}
+        .form-text h1 {
+            color: rgb(5, 5, 5);
+            font-family: Roboto;
+            font-style: bold;
+            margin-top: 500px;
+        }
 
-.container{
-    margin: 0 auto;
-    table-layout:fixed;
-    font-family: Roboto;
-    font-size: 20px;
-    color: rgb(0, 0, 0);
-}           
-.tab{
-    text-align: center;
-    width: 900px;
-    color: rgb(0, 0, 0);
-}
-.tab-2{
-    font-family: Roboto;
-    font-style: normal;
-    font-size: 20px;
-    width: 900px;
-    border: 1px solid #000;
-    padding: 10px 20px 10px 10px;
-    color: rgb(0, 0, 0);
-}
-.tab-2 input{
-    font-family: Roboto;
-    font-style: normal;
-    font-size: 20px;
-    display: block;
-    margin-bottom: 10px;
-    width: 900px;
-    padding: 10px 20px 10px 10px;
-}
-tr{
-    transition:all .25s ease-in-out;
-    border: 1px solid #000;
-    border-right: solid 1px rgb(0, 0, 0); 
-    border-left: solid 1px rgb(0, 0, 0);
-    overflow:hidden; 
-    white-space:nowrap;
-}
-tr:hover{
-    background-color:#EEE;
-    cursor: pointer;
-}
-td {
-    border: 1px solid #000;
-    border-right: solid 1px rgb(0, 0, 0); 
-    border-left: solid 1px rgb(0, 0, 0);
-}
+        .form-text h2 {
+            color: rgb(5, 5, 5);
+            font-family: Roboto;
+            margin-top: 10px;
+            font-size: 20px;
+            font-style: normal;
+            text-align: center;
+            width: 1000px;
+        }
 
-#table{
-    font-family: Roboto;
-    font-style: normal;
-    border: 1px solid #000000;
-    border-right: solid 1px rgb(0, 0, 0); 
-    border-left: solid 1px rgb(0, 0, 0);
-    height: 200px;
-    width: 900px;
-    font-size: 20px;
-    color: rgb(0, 0, 0);
-    padding: 3px 0 3px 10px;
-    margin-top: 10px;
-    text-align: center;
-}
+        .form-text p {
+            font-family: Roboto;
+            font-style: bold;
+            font-size: large;
+        }
 
+        .main-form div {
+            margin: 10px 10px;
+            width: 300px;
+            display: inline-block;
+        }
 
-#newrow{
-    width: 950px;
-    text-align: center;
-    background-color: #f2f3f6 !important;
-    color: rgb(0, 0, 0) !important;
-}
+        .main-form div input {
+            width: 100%;
+            font-family: Roboto;
+            font-style: normal;
+            background: #f2f3f6;
+            border: 1px solid #f2f3f6;
+            font-size: 20px;
+            color: rgb(0, 0, 0);
+            outline: none;
+            padding: 3px 0 3px 10px;
+            margin-top: 10px;
+        }
 
-#newrow input:hover{
-    font-family: Roboto;
-    font-style: normal;
-    text-align: center;
-    width: 950px;
-    background-color: black !important;
-    color: #fff !important;
-}
+        .main-form div select {
+            width: 104%;
+            font-family: Roboto;
+            font-style: normal;
+            background: none;
+            border: 1px solid #f2f3f6;
+            font-size: 20px;
+            color: rgb(0, 0, 0);
+            outline: none;
+            padding: 3px 0 3px 10px;
+            margin-top: 10px;
+        }
 
-#submit{
-    width: 100%;
-    text-align: center;
-    font-family: Roboto;
-    font-style: normal;
-    font-size: 20px;
-    width: 300px;
-}
-#submit input{
-    font-family: Roboto;
-    font-style: normal;
-    text-align: center;
-    width: 300px;
-    background-color: #0075C9 !important;
-    color: rgb(255, 255, 255) !important;
-    transition: all .3s;
-}
-#submit input:hover{
-    font-family: Roboto;
-    font-style: normal;
-    text-align: center;
-    width: 300px;
-    background-color: black !important;
-    color: #fff !important;
-}
-#submit input:active{
-    font-family: Roboto;
-    font-style: normal;
-    text-align: center;
-    font-size: 20px;
-    width: 300px;
-    background-color: rgb(46, 20, 5) !important;
-    color: #fff !important;
-}
+        .main-form div span {
+            width: 100%;
+            font-family: Roboto;
+            font-style: normal;
+            color: rgb(0, 0, 0);
+            font-size: 25px;
+        }
 
-#end{
-    text-align: center;
-    padding: 100px 100px 100px 100px;
-    width: 600px;
-}
+        #attend {
+            width: 104%;
+            font-family: Roboto;
+            font-style: normal;
+            background: #f2f3f6;
+            height: 200px;
+            width: 950px;
+            font-size: 20px;
+            color: rgb(0, 0, 0);
+            padding: 3px 0 3px 10px;
+            margin-top: 10px;
+        }
 
-@media screen and (max-width:710px) {
-    .main-form{
-        text-align: center;
-    }
-}
+        .container {
+            margin: 0 auto;
+            table-layout: fixed;
+            font-family: Roboto;
+            font-size: 20px;
+            color: rgb(0, 0, 0);
+        }
+
+        .tab {
+            text-align: center;
+            width: 900px;
+            color: rgb(0, 0, 0);
+        }
+
+        .tab-2 {
+            font-family: Roboto;
+            font-style: normal;
+            font-size: 20px;
+            width: 900px;
+            border: 1px solid #000;
+            padding: 10px 20px 10px 10px;
+            color: rgb(0, 0, 0);
+        }
+
+        .tab-2 input {
+            font-family: Roboto;
+            font-style: normal;
+            font-size: 20px;
+            display: block;
+            margin-bottom: 10px;
+            width: 900px;
+            padding: 10px 20px 10px 10px;
+        }
+
+        tr {
+            transition: all .25s ease-in-out;
+            border: 1px solid #000;
+            border-right: solid 1px rgb(0, 0, 0);
+            border-left: solid 1px rgb(0, 0, 0);
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        tr:hover {
+            background-color: #EEE;
+            cursor: pointer;
+        }
+
+        td {
+            border: 1px solid #000;
+            border-right: solid 1px rgb(0, 0, 0);
+            border-left: solid 1px rgb(0, 0, 0);
+        }
+
+        #table {
+            font-family: Roboto;
+            font-style: normal;
+            border: 1px solid #000000;
+            border-right: solid 1px rgb(0, 0, 0);
+            border-left: solid 1px rgb(0, 0, 0);
+            height: 200px;
+            width: 900px;
+            font-size: 20px;
+            color: rgb(0, 0, 0);
+            padding: 3px 0 3px 10px;
+            margin-top: 10px;
+            text-align: center;
+        }
 
 
-</style>
+        #newrow {
+            width: 950px;
+            text-align: center;
+            background-color: #f2f3f6 !important;
+            color: rgb(0, 0, 0) !important;
+        }
 
-<div class="form">
-    <div class="form-text">
+        #newrow input:hover {
+            font-family: Roboto;
+            font-style: normal;
+            text-align: center;
+            width: 950px;
+            background-color: black !important;
+            color: #fff !important;
+        }
 
+        #submit {
+            width: 100%;
+            text-align: center;
+            font-family: Roboto;
+            font-style: normal;
+            font-size: 20px;
+            width: 300px;
+        }
+
+        #submit input {
+            font-family: Roboto;
+            font-style: normal;
+            text-align: center;
+            width: 300px;
+            background-color: #0075C9 !important;
+            color: rgb(255, 255, 255) !important;
+            transition: all .3s;
+        }
+
+        #submit input:hover {
+            font-family: Roboto;
+            font-style: normal;
+            text-align: center;
+            width: 300px;
+            background-color: black !important;
+            color: #fff !important;
+        }
+
+        #submit input:active {
+            font-family: Roboto;
+            font-style: normal;
+            text-align: center;
+            font-size: 20px;
+            width: 300px;
+            background-color: rgb(46, 20, 5) !important;
+            color: #fff !important;
+        }
+
+        #end {
+            text-align: center;
+            padding: 100px 100px 100px 100px;
+            width: 600px;
+        }
+
+        @media screen and (max-width: 710px) {
+            .main-form {
+                text-align: center;
+            }
+        }
+
+
+    </style>
+
+    <div class="form">
+        <div class="form-text">
+
+        </div>
+        <div class="main-form">
+
+        </div>
     </div>
-    <div class="main-form">
 
-    </div>
-</div>
-
-{%endblock content%}
+{% endblock content %}

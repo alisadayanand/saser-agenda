@@ -11,6 +11,7 @@ page_state = ''
 
 main = Flask(__name__)
 
+
 # Routes
 
 
@@ -253,7 +254,28 @@ def getMeetings():
 def getMeetingsWithView():
     date = request.form["date"]
     meeting = getMeetingByDate(date)
-    return render_template("agenda_set.html", agenda=meeting.agenda)
+    meetings = getMeetings()
+
+    if not meeting.agenda:
+        return render_template("agenda_set.html",
+                               meetings=meetings,
+                               meeting_name=meeting.meeting_name,
+                               meeting_start_time=meeting.meeting_start_time,
+                               meeting_end_time=meeting.meeting_end_time)
+
+    else:
+        return render_template("agenda_set.html",
+                               meetings=meetings,
+                               meeting_name=meeting.meeting_name,
+                               meeting_start_time=meeting.meeting_start_time,
+                               meeting_end_time=meeting.meeting_end_time,
+                               agenda_location=meeting.agenda.location,
+                               agenda_chairperson=meeting.agenda.chairperson,
+                               agenda_attendees=meeting.agenda.attendees,
+                               agenda_by_invitation=meeting.agenda.by_invitation,
+                               agenda_apologies_declines=meeting.agenda.apologies_declines,
+                               agenda_minute_taker=meeting.agenda.minute_taker)
+
 
 @main.errorhandler(404)
 def page_not_found(e):
@@ -332,12 +354,14 @@ def selectAllMeetings():
         print("Meeting ID: {}".format(meeting.meeting_id))
     return meetings
 
+
 def getMeetingByDate(date):
     return session.query(Meeting).filter_by(meeting_date=date).first()
 
 
 def selectAllAgenda_Topics():
     return session.query(Agenda_Topics).all()
+
 
 if __name__ == "__main__":
     # Quick test configuration. Please use proper Flask configuration options
@@ -347,7 +371,6 @@ if __name__ == "__main__":
     main.config['SESSION_TYPE'] = 'filesystem'
 
     main.run(debug=True)
-
 
 # TODO:
 #
@@ -361,4 +384,4 @@ if __name__ == "__main__":
 #
 # max varchar text fields in backend
 #
-# meeting id dropdown in set agenda. Frontend and backend
+# meeting id dropdown in set agenda. Frontend and backend (DONE)
