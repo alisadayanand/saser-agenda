@@ -8,6 +8,7 @@ from models.Meeting import Meeting
 session = Session()
 selectedEditAgenda = ''
 page_state = ''
+meeting_date = ''
 
 main = Flask(__name__)
 
@@ -134,11 +135,16 @@ def viewAgendaByDate():
 
 @main.route('/addAgenda', methods=['POST', 'GET'])
 def addAgenda():
-    # meetingId = request.form['hiddenMeetingId']
-    meetingId = request.form['name']
-    meetingDate = request.form['date']
-    startTime = request.form['starttime']
-    endTime = request.form['endtime']
+
+    global meeting_date
+    meeting = getMeetingByDate(meeting_date)
+
+    meetingId = meeting.meeting_id
+    meetingDate = meeting.meeting_date
+    startTime = meeting.meeting_start_time
+    endTime = meeting.meeting_end_time
+
+
     location = request.form['locroom']
     chairperson = request.form['chairperson']
     attendees = request.form['attendees']
@@ -256,6 +262,9 @@ def getMeetingsWithView():
     meeting = getMeetingByDate(date)
     meetings = getMeetings()
 
+    global meeting_date
+    meeting_date = date
+
     if not meeting.agenda:
         return render_template("agenda_set.html",
                                meetings=meetings,
@@ -292,7 +301,7 @@ def addAgendaAndTopicsToDb(newAgenda, newTopic):
     session.refresh(newAgenda)
 
     newTopic.agenda_id = newAgenda.agenda_id
-    newTopic.minutes_id = 1
+    newTopic.minutes_id = newAgenda.agenda_id
 
     session.add(newTopic)
     session.commit()
@@ -351,7 +360,7 @@ def deleteTopic(id):
 def selectAllMeetings():
     meetings = session.query(Meeting).all()
     for meeting in meetings:
-        print("Meeting ID: {}".format(meeting.meeting_id))
+        print("Meeting ID: {}".format(meeting.meeting_date))
     return meetings
 
 
